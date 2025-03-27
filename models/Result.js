@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const resultSchema = new mongoose.Schema(
   {
-    email: String,
-    answers: mongoose.Schema.Types.Mixed, // ← laat elk JSON toe
-    average: Number,
+    email: { type: String, required: false },
+    answers: { type: mongoose.Schema.Types.Mixed, required: true },
+    average: { type: Number, required: true },
   },
-  { strict: false } // ← belangrijk: laat extra velden toe
+  { strict: false } // ← laat alles toe
 );
 
 module.exports = mongoose.model('Result', resultSchema);
