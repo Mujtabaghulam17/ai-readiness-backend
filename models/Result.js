@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 
-const ResultSchema = new mongoose.Schema({
+const resultSchema = new mongoose.Schema({
   email: { type: String, required: false },
-  answers: { type: Map, of: Number },
-  average: Number,
-  submittedAt: { type: Date, default: Date.now }
+  answers: { type: mongoose.Schema.Types.Mixed, required: true },
+  average: { type: Number, required: true },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model('Result', ResultSchema);
+module.exports = mongoose.model('Result', resultSchema);
