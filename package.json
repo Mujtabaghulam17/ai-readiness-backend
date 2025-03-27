@@ -1,13 +1,10 @@
 {
-  "homepage": "https://Mujtabaghulam17.github.io/ai-data-governance''
+  
   "name": "ai-readiness-backend",
   "version": "1.0.0",
   "description": "Backend API for storing AI readiness scan results",
   "main": "server.js",
   "scripts": {
-    "predeploy": "npm run build",
-"deploy": "gh-pages -d build"
-
     "start": "node server.js"
   },
   "dependencies": {
