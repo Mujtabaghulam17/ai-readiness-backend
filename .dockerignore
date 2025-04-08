@@ -1,0 +1,33 @@
+# Dependency directories (installed within container)
+node_modules
+
+# Docker files (not needed inside the image itself)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Git repository files
+.git
+.gitignore
+
+# Environment variable files (use compose 'environment' section instead)
+.env*
+*.env
+
+# Operating System generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+*.log
+
+# Optional: Exclude test files, docs etc. if not needed in final image
+# test/
+# tests/
+# coverage/
+# docs/
+# README.md
