@@ -1,0 +1,63 @@
+version: '3.8' # Specifies the Docker Compose file format version
+
+services:
+  # Service for your backend application
+  backend-app:
+    build: . # Tells Compose to build an image using the Dockerfile in the current directory
+    container_name: ai-readiness-backend # Custom name for the backend container
+    restart: unless-stopped # Policy to restart the container if it stops unexpectedly
+    ports:
+      # Map port 3001 on your HOST machine to port 3000 INSIDE the container
+      # Access your backend via http://localhost:3001
+      - "3001:3000"
+    environment:
+      # Environment variables passed to the backend container
+      NODE_ENV: development # Set Node environment (useful for conditional logic)
+      # The connection string points to the MongoDB service defined below ('mongo-db')
+      # Docker Compose networking allows services to reach each other by service name
+      MONGODB_URI: mongodb://mongo-db:27017/aiReadinessDB
+      PORT: 3000 # The port your Node.js app listens on *inside* the container
+      # Add any other required environment variables here
+      # EXAMPLE_API_KEY: your_secret_key
+    volumes:
+      # Mount the current directory (.) on the host to /app in the container
+      # This allows live code changes during development without rebuilding the image
+      # Note: Be cautious using host mounts like this in production environments
+      - .:/app
+      # Use a separate volume mount for node_modules to prevent the host's
+      # node_modules (if any) from overwriting the ones installed inside the container
+      - /app/node_modules
+    depends_on:
+      # Ensures the mongo-db service is started before this backend-app service starts
+      # Note: Doesn't guarantee MongoDB is fully ready, just that the container started
+      - mongo-db
+    networks:
+      # Connect this service to the custom network defined below
+      - app-network
+
+  # Service for the MongoDB database
+  mongo-db:
+    image: mongo:6 # Use a specific major version (like 6 or 7) for stability
+    container_name: ai-readiness-mongodb # Custom name for the database container
+    restart: unless-stopped
+    ports:
+      # Optional: Map the MongoDB port to the host if you want to connect
+      # directly using tools like MongoDB Compass from your Mac
+      - "27017:27017"
+    volumes:
+      # Persist MongoDB data using a named volume called 'mongo-data'
+      # '/data/db' is the default path where MongoDB stores data inside its container
+      - mongo-data:/data/db
+    networks:
+      # Connect this service to the custom network
+      - app-network
+
+# Define the custom network bridge for services to communicate
+networks:
+  app-network:
+    driver: bridge
+
+# Define the named volume for persistent MongoDB data
+volumes:
+  mongo-data:
+    driver: local # Specifies the volume driver (local is default and fine here)
